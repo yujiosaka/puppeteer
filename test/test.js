@@ -1397,6 +1397,15 @@ describe('Page', function() {
       expect(requests.length).toBe(5);
       expect(requests[2].resourceType()).toBe('document');
     });
+
+    fit('should work with feedjit script', async({page, server}) => {
+      await page.setRequestInterception(true);
+      page.on('request', request => request.continue());
+      const response = await page.goto(server.PREFIX + '/feedjit.html');
+      expect(response.status()).toBe(200);
+      expect(response.url()).toContain('feedjit.html');
+    });
+
     it('should be able to abort redirects', async({page, server}) => {
       await page.setRequestInterception(true);
       server.setRedirect('/non-existing.json', '/non-existing-2.json');
